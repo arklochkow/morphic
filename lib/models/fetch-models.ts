@@ -175,8 +175,23 @@ export async function fetchOpenAIModels(): Promise<Model[]> {
     return []
   }
 
+  const configuredModel = process.env.OPENAI_MODEL?.trim()
+  if (configuredModel) {
+    return [
+      {
+        id: configuredModel,
+        name: configuredModel,
+        provider: 'OpenAI',
+        providerId: 'openai'
+      }
+    ]
+  }
+
   try {
-    const json = await fetchJson('https://api.openai.com/v1/models', {
+    const baseURL = (
+      process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1'
+    ).replace(/\/+$/, '')
+    const json = await fetchJson(`${baseURL}/models`, {
       Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
     })
 

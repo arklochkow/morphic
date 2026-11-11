@@ -69,14 +69,19 @@ export async function getModelSelectorData(): Promise<ModelSelectorData> {
   }
 
   const modelsByProvider = await fetchAvailableModels()
-  const fallbackModel = pickFirstAvailableModel(modelsByProvider)
+  const fallbackModel =
+    process.env.OPENAI_MODEL?.trim() && isProviderEnabled('openai')
+      ? DEFAULT_MODEL
+      : pickFirstAvailableModel(modelsByProvider)
   const hasAvailableModels =
     fallbackModel !== null || isProviderEnabled(DEFAULT_MODEL.providerId)
   const cookieStore = await cookies()
   const selectedModelKey = resolveSelectedModelKey(
     modelsByProvider,
     fallbackModel,
-    cookieStore.get(MODEL_SELECTION_COOKIE)?.value
+    process.env.OPENAI_MODEL?.trim() && isProviderEnabled('openai')
+      ? undefined
+      : cookieStore.get(MODEL_SELECTION_COOKIE)?.value
   )
 
   return {

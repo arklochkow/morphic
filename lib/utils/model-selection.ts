@@ -109,6 +109,10 @@ export async function selectModel({
   cookieStore
 }: ModelSelectionParams): Promise<Model | null> {
   if (!isCloudDeployment()) {
+    if (process.env.OPENAI_MODEL?.trim() && isProviderEnabled('openai')) {
+      return DEFAULT_MODEL
+    }
+
     const parsedCookie = parseModelSelectionCookie(
       cookieStore?.get(MODEL_SELECTION_COOKIE)?.value
     )

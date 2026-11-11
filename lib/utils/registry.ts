@@ -1,7 +1,7 @@
 import { anthropic } from '@ai-sdk/anthropic'
 import { createGateway } from '@ai-sdk/gateway'
 import { google } from '@ai-sdk/google'
-import { openai } from '@ai-sdk/openai'
+import { createOpenAI } from '@ai-sdk/openai'
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible'
 import { createProviderRegistry, LanguageModel } from 'ai'
 import { createOllama } from 'ai-sdk-ollama'
@@ -16,7 +16,9 @@ function normalizeOpenAICompatibleBaseURL(raw: string): string {
 
 // Build providers object conditionally
 const providers: Record<string, any> = {
-  openai,
+  openai: createOpenAI({
+    baseURL: process.env.OPENAI_BASE_URL || undefined
+  }),
   anthropic,
   google,
   'openai-compatible': createOpenAICompatible({
@@ -45,6 +47,11 @@ if (ollamaProvider) {
 export const registry = createProviderRegistry(providers)
 
 export function getModel(model: string): LanguageModel {
+  const openaiModel = process.env.OPENAI_MODEL?.trim()
+  if (model.startsWith('openai:') && openaiModel) {
+    model = `openai:${openaiModel}`
+  }
+
   // For Ollama models, bypass the registry to pass model-level settings
   // that ai-sdk-ollama requires (think, supportedUrls override).
   if (model.startsWith('ollama:') && ollamaProvider) {

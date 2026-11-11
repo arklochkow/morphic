@@ -23,7 +23,41 @@ describe('fetch-models', () => {
 
   afterEach(() => {
     vi.unstubAllGlobals()
+    vi.unstubAllEnvs()
     delete process.env.OLLAMA_BASE_URL
+  })
+
+  it('uses the configured OpenAI model without requesting a model list', async () => {
+    mockIsProviderEnabled.mockReturnValue(true)
+    vi.stubEnv('OPENAI_MODEL', ' custom-model ')
+    const fetchMock = vi.fn()
+    vi.stubGlobal('fetch', fetchMock)
+
+    expect(await fetchModels.fetchOpenAIModels()).toEqual([
+      {
+        id: 'custom-model',
+        name: 'custom-model',
+        provider: 'OpenAI',
+        providerId: 'openai'
+      }
+    ])
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it('loads models from the configured OpenAI base URL', async () => {
+    mockIsProviderEnabled.mockReturnValue(true)
+    vi.stubEnv('OPENAI_BASE_URL', 'https://proxy.example/v1/')
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue({ ok: true, json: async () => ({ data: [] }) })
+    vi.stubGlobal('fetch', fetchMock)
+
+    await fetchModels.fetchOpenAIModels()
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://proxy.example/v1/models',
+      expect.any(Object)
+    )
   })
 
   it('filters non-chat and snapshot OpenAI models', async () => {

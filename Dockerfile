@@ -40,7 +40,7 @@ COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 
 # Copy entrypoint script for database migration
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
-RUN chmod +x /app/docker-entrypoint.sh
+RUN sed -i 's/\r$//' /app/docker-entrypoint.sh && chmod +x /app/docker-entrypoint.sh
 
 # Start production server with migration
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
