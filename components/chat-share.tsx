@@ -9,6 +9,8 @@ import { shareChat } from '@/lib/actions/chat'
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
 import { cn } from '@/lib/utils'
 
+import { T } from '@/components/language-provider'
+
 import { Button } from './ui/button'
 import {
   Dialog,
@@ -82,10 +84,15 @@ export function ChatShare({ chatId, className }: ChatShareProps) {
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Share Chat</DialogTitle>
+            <DialogTitle>
+              <T text={'Share Chat'} />
+            </DialogTitle>
             <DialogDescription>
-              Anyone with the link will be able to view this chat if it&apos;s
-              public.
+              <T
+                text={
+                  "Anyone with the link will be able to view this chat if it's public."
+                }
+              />{' '}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="items-center">

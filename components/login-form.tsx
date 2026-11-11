@@ -21,6 +21,8 @@ import { IconLogo } from '@/components/ui/icons'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
+import { T } from '@/components/language-provider'
+
 import { PasswordInput } from './ui/password-input'
 
 export function LoginForm({
@@ -123,7 +125,7 @@ export function LoginForm({
         <CardHeader className="text-center">
           <CardTitle className="text-2xl flex flex-col items-center justify-center gap-4">
             <IconLogo className="size-12" />
-            Welcome back
+            <T text={'Welcome back'} />{' '}
           </CardTitle>
           <CardDescription>
             {confirmed
@@ -157,7 +159,7 @@ export function LoginForm({
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
                     <span className="bg-muted px-2 text-muted-foreground">
-                      Or
+                      <T text={'Or'} />{' '}
                     </span>
                   </div>
                 </div>
@@ -166,7 +168,9 @@ export function LoginForm({
 
             <form onSubmit={handleLogin} className="flex flex-col gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">
+                  <T text={'Email'} />
+                </Label>
                 <Input
                   id="email"
                   type="email"
@@ -178,13 +182,15 @@ export function LoginForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">
+                    <T text={'Password'} />
+                  </Label>
                   {capabilities.passwordReset && (
                     <Link
                       href="/auth/forgot-password"
                       className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                     >
-                      Forgot password?
+                      <T text={'Forgot password?'} />{' '}
                     </Link>
                   )}
                 </div>
@@ -205,12 +211,12 @@ export function LoginForm({
           </div>
           {capabilities.signUp && (
             <div className="mt-6 text-center text-sm">
-              Don&apos;t have an account?{' '}
+              <T text={"Don't have an account?"} />{' '}
               <Link
                 href="/auth/sign-up"
                 className="underline underline-offset-4"
               >
-                Sign Up
+                <T text={'Sign Up'} />{' '}
               </Link>
             </div>
           )}
@@ -218,7 +224,7 @@ export function LoginForm({
       </Card>
       <div className="text-center text-xs text-muted-foreground">
         <Link href="/" className="hover:underline">
-          &larr; Back to Home
+          <T text={'← Back to Home'} />{' '}
         </Link>
       </div>
     </div>

@@ -18,6 +18,8 @@ import {
   DialogTitle
 } from '@/components/ui/dialog'
 
+import { T } from '@/components/language-provider'
+
 interface ErrorModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -112,14 +114,14 @@ export function ErrorModal({
             {getErrorIcon()}
           </div>
           <DialogTitle className="text-center text-xl font-semibold">
-            {getErrorTitle()}
+            <T text={getErrorTitle()} />
           </DialogTitle>
           <DialogDescription className="text-center text-muted-foreground">
-            {getErrorDescription()}
+            <T text={getErrorDescription()} />
           </DialogDescription>
           {getErrorDetails() && (
             <div className="mt-4 rounded-lg bg-muted p-3 text-sm text-muted-foreground">
-              {getErrorDetails()}
+              <T text={getErrorDetails() ?? ''} />
             </div>
           )}
         </DialogHeader>
@@ -127,10 +129,14 @@ export function ErrorModal({
           {error.type === 'auth' ? (
             <>
               <Button asChild className="w-full">
-                <Link href="/auth/sign-up">Sign Up</Link>
+                <Link href="/auth/sign-up">
+                  <T text={'Sign Up'} />
+                </Link>
               </Button>
               <Button asChild variant="outline" className="w-full">
-                <Link href="/auth/login">Sign In</Link>
+                <Link href="/auth/login">
+                  <T text={'Sign In'} />
+                </Link>
               </Button>
             </>
           ) : (
@@ -144,7 +150,7 @@ export function ErrorModal({
                   className="w-full"
                 >
                   <RefreshCw className="mr-2 size-4" />
-                  Try Again
+                  <T text={'Try Again'} />{' '}
                 </Button>
               )}
               <Button

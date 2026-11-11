@@ -15,8 +15,11 @@ import { TooltipButton } from '@/components/ui/tooltip-button'
 import { ArtifactContent } from '@/components/artifact/artifact-content'
 import { useArtifact } from '@/components/artifact/artifact-context'
 import { DraftPanel } from '@/components/draft/draft-panel'
+import { useTranslation } from '@/components/language-provider'
 
 export function InspectorPanel() {
+  const { t } = useTranslation()
+
   const { state, close } = useArtifact()
   const part = state.part
   if (!part) return null
@@ -78,7 +81,7 @@ export function InspectorPanel() {
                   variant="ghost"
                   size="icon"
                   onClick={close}
-                  aria-label="Close panel"
+                  aria-label={t('Close panel')}
                   tooltipContent="Close"
                 >
                   <X className="size-4" />

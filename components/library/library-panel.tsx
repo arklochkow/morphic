@@ -51,6 +51,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { TooltipButton } from '@/components/ui/tooltip-button'
 
+import { T, useTranslation } from '@/components/language-provider'
 import { MarkdownMessage } from '@/components/message'
 
 import { useLibrary } from './library-context'
@@ -103,6 +104,8 @@ function LibraryItemActionsMenu({
   deleteLabel: string
   onDelete: () => void
 }) {
+  const { t } = useTranslation()
+
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
@@ -114,7 +117,7 @@ function LibraryItemActionsMenu({
           size="icon"
           className="size-7 shrink-0 text-muted-foreground"
           onClick={event => event.stopPropagation()}
-          aria-label="Note actions"
+          aria-label={t('Note actions')}
         >
           <MoreHorizontal className="size-4" />
         </Button>
@@ -155,6 +158,8 @@ function LibraryLoadingSkeleton() {
 }
 
 export function LibraryPanel() {
+  const { t } = useTranslation()
+
   const {
     isOpen,
     closeLibrary,
@@ -598,7 +603,7 @@ export function LibraryPanel() {
                       setSelectedNote(null)
                       setSelectedFile(null)
                     }}
-                    aria-label="Back to library"
+                    aria-label={t('Back to library')}
                     tooltipContent="Back"
                   >
                     <ArrowLeft className="size-4" />
@@ -630,7 +635,7 @@ export function LibraryPanel() {
                     variant="ghost"
                     size="icon"
                     onClick={() => handleCloseLibrary('detail_header')}
-                    aria-label="Close panel"
+                    aria-label={t('Close panel')}
                     tooltipContent="Close"
                   >
                     <X className="size-4" />
@@ -643,13 +648,15 @@ export function LibraryPanel() {
                   <div className="flex items-center gap-2 rounded-md p-2">
                     <LibraryIcon size={18} />
                   </div>
-                  <span className="truncate text-sm font-medium">Library</span>
+                  <span className="truncate text-sm font-medium">
+                    <T text={'Library'} />
+                  </span>
                 </h3>
                 <TooltipButton
                   variant="ghost"
                   size="icon"
                   onClick={() => handleCloseLibrary('panel_header')}
-                  aria-label="Close panel"
+                  aria-label={t('Close panel')}
                   tooltipContent="Close"
                 >
                   <X className="size-4" />
@@ -668,7 +675,7 @@ export function LibraryPanel() {
                 <MarkdownMessage message={selectedNote.content} />
               </article>
               <footer className="shrink-0 border-t px-4 py-2 text-xs text-muted-foreground">
-                Saved {formatNoteDate(selectedNote.createdAt)}
+                <T text={'Saved'} /> {formatNoteDate(selectedNote.createdAt)}
               </footer>
             </div>
           ) : selectedFile ? (
@@ -691,27 +698,33 @@ export function LibraryPanel() {
                 )}
                 <div className="mt-4 space-y-3 text-sm">
                   <div>
-                    <p className="text-xs text-muted-foreground">Filename</p>
+                    <p className="text-xs text-muted-foreground">
+                      <T text={'Filename'} />
+                    </p>
                     <p className="break-words font-medium">
                       {selectedFile.filename}
                     </p>
                   </div>
                   <div className="grid grid-cols-2 gap-3 text-xs">
                     <div>
-                      <p className="text-muted-foreground">Type</p>
+                      <p className="text-muted-foreground">
+                        <T text={'Type'} />
+                      </p>
                       <p className="mt-0.5 break-words">
                         {selectedFile.mediaType}
                       </p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground">Size</p>
+                      <p className="text-muted-foreground">
+                        <T text={'Size'} />
+                      </p>
                       <p className="mt-0.5">{formatBytes(selectedFile.size)}</p>
                     </div>
                   </div>
                 </div>
               </div>
               <footer className="shrink-0 border-t px-4 py-2 text-xs text-muted-foreground">
-                Added {formatNoteDate(selectedFile.createdAt)}
+                <T text={'Added'} /> {formatNoteDate(selectedFile.createdAt)}
               </footer>
             </div>
           ) : (
@@ -858,7 +871,9 @@ export function LibraryPanel() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isDeleting}>
+              <T text={'Cancel'} />
+            </AlertDialogCancel>
             <AlertDialogAction
               disabled={isDeleting}
               onClick={event => {

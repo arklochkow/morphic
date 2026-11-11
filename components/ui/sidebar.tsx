@@ -32,6 +32,8 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip'
 
+import { T, useTranslation } from '@/components/language-provider'
+
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = '16rem'
@@ -331,7 +333,9 @@ const SidebarTrigger = React.forwardRef<
       {...props}
     >
       <Icon size={18} />
-      <span className="sr-only">Toggle Sidebar</span>
+      <span className="sr-only">
+        <T text="Toggle Sidebar" />
+      </span>
     </Button>
   )
 })
@@ -341,16 +345,17 @@ const SidebarRail = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<'button'>
 >(({ className, ...props }, ref) => {
+  const { t } = useTranslation()
   const { toggleSidebar } = useSidebar()
 
   return (
     <button
       ref={ref}
       data-sidebar="rail"
-      aria-label="Toggle Sidebar"
+      aria-label={t('Toggle Sidebar')}
       tabIndex={-1}
       onClick={toggleSidebar}
-      title="Toggle Sidebar"
+      title={t('Toggle Sidebar')}
       className={cn(
         'absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-[background-color,transform] duration-[140ms] ease-[var(--motion-ease-out)] after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border group-data-[side=left]:-right-4 group-data-[side=right]:left-0 sm:flex',
         'in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize',

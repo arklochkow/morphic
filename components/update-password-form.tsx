@@ -17,11 +17,15 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
+import { T, useTranslation } from '@/components/language-provider'
+
 export function UpdatePasswordForm({
   className,
   token,
   ...props
 }: React.ComponentPropsWithoutRef<'div'> & { token?: string }) {
+  const { t } = useTranslation()
+
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -51,20 +55,24 @@ export function UpdatePasswordForm({
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Reset Your Password</CardTitle>
+          <CardTitle className="text-2xl">
+            <T text={'Reset Your Password'} />
+          </CardTitle>
           <CardDescription>
-            Please enter your new password below.
+            <T text={'Please enter your new password below.'} />{' '}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleForgotPassword}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="password">New password</Label>
+                <Label htmlFor="password">
+                  <T text={'New password'} />
+                </Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="New password"
+                  placeholder={t('New password')}
                   required
                   value={password}
                   onChange={e => setPassword(e.target.value)}

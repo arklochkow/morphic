@@ -16,6 +16,8 @@ import {
 
 import { cn } from '@/lib/utils'
 
+import { T } from '@/components/language-provider'
+
 import { Badge } from './ui/badge'
 import { Separator } from './ui/separator'
 import { StatusIndicator } from './ui/status-indicator'
@@ -121,7 +123,7 @@ export function ToolArgsSection({
       {number && number > 0 && (
         <div className="shrink-0">
           <StatusIndicator icon={Check} iconClassName="text-green-500">
-            {number} results
+            {number} <T text={'results'} />{' '}
           </StatusIndicator>
         </div>
       )}

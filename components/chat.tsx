@@ -46,6 +46,8 @@ import { getTextFromParts } from '@/lib/utils/message-utils'
 
 import { useFileDropzone } from '@/hooks/use-file-dropzone'
 
+import { T, useTranslation } from '@/components/language-provider'
+
 import { registerDraftSource, unregisterDraftSource } from './draft/draft-store'
 import { Button } from './ui/button'
 import { Card, CardDescription, CardFooter, CardHeader } from './ui/card'
@@ -80,6 +82,8 @@ export function Chat({
   libraryAvailable?: boolean
   modelSelectorData?: ModelSelectorData
 }) {
+  const { t } = useTranslation()
+
   const router = useRouter()
   const {
     enabled: usageBudgetEnabled,
@@ -510,7 +514,7 @@ export function Chat({
         navigator.clipboard
           .writeText(stripSpecBlocks(stripSourceContextBlocks(text)))
           .then(
-            () => toast.success('Message copied to clipboard'),
+            () => toast.success(t('Message copied to clipboard')),
             () => toast.error('Failed to copy message')
           )
       }
@@ -519,7 +523,7 @@ export function Chat({
     window.addEventListener(SHORTCUT_EVENTS.copyMessage, handleCopyMessage)
     return () =>
       window.removeEventListener(SHORTCUT_EVENTS.copyMessage, handleCopyMessage)
-  }, [])
+  }, [t])
 
   // Dispatch custom event when messages change
   useEffect(() => {
@@ -592,7 +596,10 @@ export function Chat({
         const sectionId = lastMessage.id
         requestAnimationFrame(() => {
           const sectionElement = document.getElementById(`section-${sectionId}`)
-          sectionElement?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          sectionElement?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          })
         })
       }
     }
@@ -802,7 +809,7 @@ export function Chat({
                   size="sm"
                   onClick={() => void store.revalidate(chatId)}
                 >
-                  Retry
+                  <T text={'Retry'} />{' '}
                 </Button>
               </CardFooter>
             </Card>

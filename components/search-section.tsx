@@ -12,6 +12,7 @@ import type { ToolPart, UIDataTypes, UIMessage, UITools } from '@/lib/types/ai'
 import { cn } from '@/lib/utils'
 
 import { useArtifact } from '@/components/artifact/artifact-context'
+import { T } from '@/components/language-provider'
 
 import { StatusIndicator } from './ui/status-indicator'
 import { CollapsibleMessage } from './collapsible-message'
@@ -89,7 +90,7 @@ export function SearchSection({
         searchResults && totalResults > 0 ? (
           <div className="flex items-center gap-2">
             <StatusIndicator icon={Check} iconClassName="text-green-500">
-              {totalResults} results
+              {totalResults} <T text={'results'} />{' '}
             </StatusIndicator>
             {searchResults.results && searchResults.results.length > 0 && (
               <SourceFavicons results={searchResults.results} maxDisplay={3} />

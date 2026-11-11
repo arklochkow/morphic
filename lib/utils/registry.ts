@@ -3,7 +3,7 @@ import { createGateway } from '@ai-sdk/gateway'
 import { google } from '@ai-sdk/google'
 import { createOpenAI } from '@ai-sdk/openai'
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible'
-import { createProviderRegistry, LanguageModel } from 'ai'
+import { createProviderRegistry, LanguageModel, wrapLanguageModel } from 'ai'
 import { createOllama } from 'ai-sdk-ollama'
 
 // Strip a trailing /v1 from the configured base URL, then re-append it,
@@ -69,9 +69,34 @@ export function getModel(model: string): LanguageModel {
     return lm
   }
 
-  return registry.languageModel(
+  const languageModel = registry.languageModel(
     model as Parameters<typeof registry.languageModel>[0]
   )
+
+  // Compatible Responses servers may not support OpenAI's stored item references.
+  // Send full history on every step, including tool loops and later chat turns.
+  const baseURL = process.env.OPENAI_BASE_URL?.replace(/\/+$/, '')
+  if (
+    model.startsWith('openai:') &&
+    baseURL &&
+    baseURL !== 'https://api.openai.com/v1'
+  ) {
+    return wrapLanguageModel({
+      model: languageModel,
+      middleware: {
+        specificationVersion: 'v4',
+        transformParams: async ({ params }) => ({
+          ...params,
+          providerOptions: {
+            ...params.providerOptions,
+            openai: { ...params.providerOptions?.openai, store: false }
+          }
+        })
+      }
+    })
+  }
+
+  return languageModel
 }
 
 export function isProviderEnabled(providerId: string): boolean {

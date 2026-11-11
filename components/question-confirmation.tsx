@@ -15,6 +15,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 
+import { T } from '@/components/language-provider'
+
 interface QuestionConfirmationProps {
   toolInvocation: ToolPart<'askQuestion'>
   onConfirm: (toolCallId: string, approved: boolean, response?: any) => void
@@ -218,11 +220,11 @@ export function QuestionConfirmation({
           <div className="flex justify-end space-x-2">
             <Button type="button" variant="outline" onClick={handleSkip}>
               <SkipForward size={16} className="mr-1" />
-              Skip
+              <T text={'Skip'} />{' '}
             </Button>
             <Button type="submit" disabled={isButtonDisabled}>
               <ArrowRight size={16} className="mr-1" />
-              Send
+              <T text={'Send'} />{' '}
             </Button>
           </div>
         </form>

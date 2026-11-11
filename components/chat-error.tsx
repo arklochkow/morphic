@@ -4,6 +4,8 @@ import { toPublicErrorPayload } from '@/lib/errors/public-error'
 
 import { Card } from '@/components/ui/card'
 
+import { T } from '@/components/language-provider'
+
 interface ChatErrorProps {
   error: Error | string | null | undefined
 }
@@ -17,7 +19,9 @@ export function ChatError({ error }: ChatErrorProps) {
     <Card className="border-destructive bg-destructive/10 p-4">
       <div className="flex items-center gap-3">
         <AlertCircle className="size-5 text-destructive shrink-0" />
-        <p className="text-sm text-destructive">{errorMessage}</p>
+        <p className="text-sm text-destructive">
+          <T text={errorMessage} />
+        </p>
       </div>
     </Card>
   )

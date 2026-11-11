@@ -14,6 +14,8 @@ import {
 import { cn } from '@/lib/utils'
 import { stripMarkdownText } from '@/lib/utils/markdown'
 
+import { T } from '@/components/language-provider'
+
 import { Button } from './ui/button'
 import { CollapsibleMessage } from './collapsible-message'
 import { PastedContentCard, UrlChip } from './pasted-parts'
@@ -236,10 +238,10 @@ export const UserTextSection: React.FC<UserTextSectionProps> = ({
             {attachments}
             <div className="flex justify-end gap-2">
               <Button variant="secondary" size="sm" onClick={handleCancelClick}>
-                Cancel
+                <T text={'Cancel'} />{' '}
               </Button>
               <Button size="sm" onClick={handleSaveClick}>
-                Save
+                <T text={'Save'} />{' '}
               </Button>
             </div>
           </div>
@@ -262,11 +264,11 @@ export const UserTextSection: React.FC<UserTextSectionProps> = ({
               >
                 {isExpanded ? (
                   <span className="inline-flex items-center gap-0.5">
-                    Show less <ChevronUp className="size-3" />
+                    <T text={'Show less'} /> <ChevronUp className="size-3" />
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-0.5">
-                    Show more <ChevronDown className="size-3" />
+                    <T text={'Show more'} /> <ChevronDown className="size-3" />
                   </span>
                 )}
               </button>

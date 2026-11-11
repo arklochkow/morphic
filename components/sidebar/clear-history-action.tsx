@@ -32,6 +32,8 @@ import {
 import { SidebarGroupAction } from '@/components/ui/sidebar'
 import { Spinner } from '@/components/ui/spinner'
 
+import { T } from '@/components/language-provider'
+
 interface ClearHistoryActionProps {
   empty: boolean
 }
@@ -83,7 +85,9 @@ export function ClearHistoryAction({ empty }: ClearHistoryActionProps) {
       <DropdownMenuTrigger asChild>
         <SidebarGroupAction disabled={empty} className="static size-7 p-1">
           <MoreHorizontal size={16} />
-          <span className="sr-only">History Actions</span>
+          <span className="sr-only">
+            <T text={'History Actions'} />
+          </span>
         </SidebarGroupAction>
       </DropdownMenuTrigger>
 
@@ -97,20 +101,27 @@ export function ClearHistoryAction({ empty }: ClearHistoryActionProps) {
                 event.preventDefault()
               }}
             >
-              <Trash2 size={14} /> Clear History
+              <Trash2 size={14} /> <T text={'Clear History'} />{' '}
             </DropdownMenuItem>
           </AlertDialogTrigger>
 
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogTitle>
+                <T text={'Are you absolutely sure?'} />
+              </AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. It will permanently delete your
-                history.
+                <T
+                  text={
+                    'This action cannot be undone. It will permanently delete your history.'
+                  }
+                />{' '}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+              <AlertDialogCancel disabled={isPending}>
+                <T text={'Cancel'} />
+              </AlertDialogCancel>
               <AlertDialogAction
                 disabled={isPending}
                 onClick={event => {

@@ -30,6 +30,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 import { AccountSettingsDialog } from '@/components/account-settings-dialog'
+import { LanguageMenu } from '@/components/language-menu'
+import { T } from '@/components/language-provider'
 import { useUsageBudget } from '@/components/usage-budget-provider'
 import { UsageDialog } from '@/components/usage-dialog'
 
@@ -132,13 +134,17 @@ export default function UserMenu({ user }: UserMenuProps) {
             }}
           >
             <UserRound className="size-4" />
-            <span>Account</span>
+            <span>
+              <T text={'Account'} />
+            </span>
           </DropdownMenuItem>
           {user.role === 'admin' && (
             <DropdownMenuItem asChild>
               <Link href="/auth/admin">
                 <IconShield className="size-4" />
-                <span>Admin</span>
+                <span>
+                  <T text={'Admin'} />
+                </span>
               </Link>
             </DropdownMenuItem>
           )}
@@ -150,16 +156,21 @@ export default function UserMenu({ user }: UserMenuProps) {
               }}
             >
               <ChartBar className="size-4" />
-              <span>Usage</span>
+              <span>
+                <T text={'Usage'} />
+              </span>
               <span className="ml-auto text-xs text-muted-foreground tabular-nums">
                 {usage.remaining} / {usage.limit}
               </span>
             </DropdownMenuItem>
           )}
+          <LanguageMenu />
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <Link2 className="size-4" />
-              <span>Links</span>
+              <span>
+                <T text={'Links'} />
+              </span>
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
               <ExternalLinkItems />
@@ -168,7 +179,9 @@ export default function UserMenu({ user }: UserMenuProps) {
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="size-4" />
-            <span>Logout</span>
+            <span>
+              <T text={'Logout'} />
+            </span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

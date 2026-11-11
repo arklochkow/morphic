@@ -22,6 +22,8 @@ import {
 } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
 
+import { T, useTranslation } from '@/components/language-provider'
+
 type Sentiment = 'positive' | 'neutral' | 'negative'
 
 interface FeedbackModalProps {
@@ -30,6 +32,8 @@ interface FeedbackModalProps {
 }
 
 export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
+  const { t } = useTranslation()
+
   const [sentiment, setSentiment] = useState<Sentiment | null>(null)
   const [message, setMessage] = useState('')
   const [isPending, startTransition] = useTransition()
@@ -69,9 +73,15 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[550px]">
         <DialogHeader>
-          <DialogTitle>Give feedback</DialogTitle>
+          <DialogTitle>
+            <T text={'Give feedback'} />
+          </DialogTitle>
           <DialogDescription>
-            Your feedback helps us improve Morphic. Let us know what you think!
+            <T
+              text={
+                'Your feedback helps us improve Morphic. Let us know what you think!'
+              }
+            />{' '}
           </DialogDescription>
         </DialogHeader>
 
@@ -116,7 +126,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
           </div>
 
           <Textarea
-            placeholder="Your feedback"
+            placeholder={t('Your feedback')}
             value={message}
             onChange={e => setMessage(e.target.value)}
             className="min-h-[150px] resize-none"
@@ -129,7 +139,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
               onClick={handleCancel}
               disabled={isPending}
             >
-              Cancel
+              <T text={'Cancel'} />{' '}
             </Button>
             <Button
               type="button"

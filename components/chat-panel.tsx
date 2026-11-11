@@ -48,6 +48,8 @@ import {
 import { faviconUrl } from '@/lib/utils/favicon'
 import { stripMarkdownText } from '@/lib/utils/markdown'
 
+import { T, useTranslation } from '@/components/language-provider'
+
 import { useArtifact } from './artifact/artifact-context'
 import { useLibrary } from './library/library-context'
 import { LibraryPickerDialog } from './library/library-picker-dialog'
@@ -150,6 +152,8 @@ export function ChatPanel({
   modelSelectorData,
   sections = []
 }: ChatPanelProps) {
+  const { t } = useTranslation()
+
   const router = useRouter()
   const panelRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
@@ -452,7 +456,7 @@ export function ChatPanel({
         <div className="mb-6 md:mb-10 flex flex-col items-center gap-2 md:gap-4">
           <IconBlinkingLogo className="size-12" />
           <h1 className="text-xl md:text-2xl font-medium text-foreground">
-            What would you like to know?
+            <T text={'What would you like to know?'} />{' '}
           </h1>
         </div>
       )}
@@ -477,7 +481,7 @@ export function ChatPanel({
               return
             }
             if (!hasAvailableModels) {
-              toast.error('No enabled model is available')
+              toast.error(t('No enabled model is available'))
               return
             }
             const uploaded = uploadedFiles.filter(f => f.status === 'uploaded')
@@ -555,7 +559,7 @@ export function ChatPanel({
 
           if (!hasAvailableModels) {
             e.preventDefault()
-            toast.error('No enabled model is available')
+            toast.error(t('No enabled model is available'))
             return
           }
           handleSubmit(e)
@@ -581,7 +585,7 @@ export function ChatPanel({
               size="icon"
               className="absolute -top-10 right-0 z-20 size-8 rounded-full shadow-md"
               onClick={handleScrollToBottom}
-              title="Scroll to bottom"
+              title={t('Scroll to bottom')}
             >
               <ChevronDown size={16} />
             </Button>
@@ -618,14 +622,15 @@ export function ChatPanel({
                   <div className="mb-1 flex items-center justify-between gap-2">
                     <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                       <FileText className="size-3.5 shrink-0" />
-                      Pasted content · {card.length.toLocaleString()} chars
+                      <T text={'Pasted content ·'} />{' '}
+                      {card.length.toLocaleString()} <T text={'chars'} />{' '}
                     </span>
                     <TooltipProvider delayDuration={200}>
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <button
                             type="button"
-                            aria-label="Expand to text"
+                            aria-label={t('Expand to text')}
                             className="shrink-0 rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
                             onClick={() => {
                               captureClient('content_card_expanded', {
@@ -646,7 +651,7 @@ export function ChatPanel({
                           </button>
                         </TooltipTrigger>
                         <TooltipContent className="text-xs">
-                          Expand to text
+                          <T text={'Expand to text'} />{' '}
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -668,11 +673,12 @@ export function ChatPanel({
                   <div className="mb-1 flex items-center justify-between gap-2">
                     <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                       <FileText className="size-3.5 shrink-0" />
-                      Quoted context · {card.length.toLocaleString()} chars
+                      <T text={'Quoted context ·'} />{' '}
+                      {card.length.toLocaleString()} <T text={'chars'} />{' '}
                     </span>
                     <button
                       type="button"
-                      aria-label="Remove quoted context"
+                      aria-label={t('Remove quoted context')}
                       className="shrink-0 rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
                       onClick={() => {
                         setQuotedContexts(prev =>
@@ -701,12 +707,13 @@ export function ChatPanel({
                     <span className="flex items-center gap-1.5 truncate text-xs font-medium text-muted-foreground">
                       <FileText className="size-3.5 shrink-0" />
                       <span className="truncate">
-                        Note: {stripMarkdownText(note.title) || 'Untitled note'}
+                        <T text={'Note:'} />{' '}
+                        {stripMarkdownText(note.title) || 'Untitled note'}
                       </span>
                     </span>
                     <button
                       type="button"
-                      aria-label="Remove note"
+                      aria-label={t('Remove note')}
                       className="shrink-0 rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
                       onClick={() => {
                         setNoteContexts(prev => prev.filter((_, j) => j !== i))
@@ -748,7 +755,7 @@ export function ChatPanel({
                     <span className="max-w-[180px] truncate">{host}</span>
                     <button
                       type="button"
-                      aria-label="Remove URL"
+                      aria-label={t('Remove URL')}
                       className="shrink-0 rounded p-0.5 hover:bg-muted hover:text-foreground"
                       onClick={() => {
                         captureClient('url_card_removed')
@@ -772,7 +779,9 @@ export function ChatPanel({
             onCompositionEnd={handleCompositionEnd}
             onFocus={() => setIsInputFocused(true)}
             onBlur={() => setIsInputFocused(false)}
-            placeholder={messages.length > 0 ? 'Reply...' : 'Ask anything...'}
+            placeholder={
+              messages.length > 0 ? t('Reply...') : t('Ask anything...')
+            }
             spellCheck={false}
             value={input}
             disabled={disabled || isLoading || isToolInvocationInProgress()}
@@ -871,14 +880,14 @@ export function ChatPanel({
                               variant="outline"
                               size="icon"
                               className="size-8 rounded-full"
-                              aria-label="Add"
+                              aria-label={t('Add')}
                             >
                               <Plus className="size-4" />
                             </Button>
                           </DropdownMenuTrigger>
                         </TooltipTrigger>
                         <TooltipContent side="bottom" className="text-xs">
-                          Add
+                          <T text={'Add'} />{' '}
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -898,11 +907,11 @@ export function ChatPanel({
                         onSelect={() => fileInputRef.current?.click()}
                       >
                         <Paperclip className="size-4" />
-                        Upload file
+                        <T text={'Upload file'} />{' '}
                       </DropdownMenuItem>
                       <DropdownMenuItem onSelect={openLibraryPicker}>
                         <LibraryIcon className="size-4" />
-                        Add from library
+                        <T text={'Add from library'} />{' '}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

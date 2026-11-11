@@ -8,6 +8,8 @@ import {
   type UpdateCheckResult
 } from '@/lib/version/update-check'
 
+import { T } from '@/components/language-provider'
+
 import packageJson from '../../package.json'
 
 /**
@@ -73,7 +75,7 @@ export async function VersionFooter({ user }: { user?: AppUser | null }) {
             rel="noopener"
             className="text-destructive underline"
           >
-            Update: {update.latestVersion}
+            <T text={'Update:'} /> {update.latestVersion}
           </a>
         ) : (
           <span className="italic">{installMethod}</span>

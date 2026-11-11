@@ -29,6 +29,8 @@ import {
 } from '@/components/ui/command'
 import { Spinner } from '@/components/ui/spinner'
 
+import { T, useTranslation } from '@/components/language-provider'
+
 import { useLibrary } from './library-context'
 
 type LibraryFilter = 'all' | 'notes' | 'files'
@@ -87,6 +89,8 @@ export function LibraryPickerDialog({
   onAttachNote: (note: NoteContext) => boolean
   onAttachFile: (file: UploadedFile) => boolean
 }) {
+  const { t } = useTranslation()
+
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<LibraryFilter>('all')
   const [notes, setNotes] = useState<Note[]>([])
@@ -288,16 +292,18 @@ export function LibraryPickerDialog({
       <CommandInput
         value={query}
         onValueChange={setQuery}
-        placeholder="Search notes and files..."
+        placeholder={t('Search notes and files...')}
       />
       <CommandList className="h-[420px] max-h-[calc(100vh-14rem)]">
         {isLoading && (
           <div className="flex items-center gap-2 px-4 py-3 text-sm text-muted-foreground">
-            <Spinner /> Loading library
+            <Spinner /> <T text={'Loading library'} />{' '}
           </div>
         )}
         {!isLoading && empty && (
-          <CommandEmpty>No library items found.</CommandEmpty>
+          <CommandEmpty>
+            <T text={'No library items found.'} />
+          </CommandEmpty>
         )}
         {!isLoading && !empty && (
           <CommandGroup heading={heading}>
@@ -317,7 +323,7 @@ export function LibraryPickerDialog({
                   </p>
                 </div>
                 <span className="shrink-0 text-[11px] text-muted-foreground">
-                  Note
+                  <T text={'Note'} />{' '}
                 </span>
               </CommandItem>
             ))}
@@ -339,7 +345,7 @@ export function LibraryPickerDialog({
                     </p>
                   </div>
                   <span className="shrink-0 text-[11px] text-muted-foreground">
-                    File
+                    <T text={'File'} />{' '}
                   </span>
                 </CommandItem>
               )

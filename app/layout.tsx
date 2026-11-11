@@ -1,4 +1,8 @@
 import type { Metadata, Viewport } from 'next'
+import { cookies } from 'next/headers'
+
+import { LOCALE_COOKIE, parseLocale } from '@/lib/i18n/translations'
+import { LanguageProvider } from '@/components/language-provider'
 import { Inter as FontSans } from 'next/font/google'
 
 import { Analytics } from '@vercel/analytics/next'
@@ -66,6 +70,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const locale = parseLocale((await cookies()).get(LOCALE_COOKIE)?.value)
   const user = await getCurrentUser()
   // Sharing is opt-in for Better Auth (ENABLE_SHARE=true); the flag is
   // folded into the capabilities on the server so a prebuilt image can
@@ -106,46 +111,48 @@ export default async function RootLayout({
     : null
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body
         className={cn(
           'fixed inset-0 flex flex-col font-sans antialiased overflow-hidden',
           fontSans.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <PostHogProvider userId={user?.id ?? null}>
-            <AppUserProvider user={user} capabilities={capabilities}>
-              <UserProvider hasUser={!!userId}>
-                <SidebarProvider defaultOpen={false}>
-                  <LibraryProvider>
-                    <UsageBudgetProvider
-                      key={user?.id ?? 'guest'}
-                      initialUsage={initialUsage}
-                      enabled={usageBudgetEnabled}
-                    >
-                      {userId && <AppSidebar user={user} />}
-                      <KeyboardShortcutHandler />
-                      <div className="flex flex-col flex-1 min-w-0">
-                        <Header user={user} />
-                        <main className="flex flex-1 min-h-0 min-w-0 overflow-hidden">
-                          <ArtifactRoot>{children}</ArtifactRoot>
-                        </main>
-                      </div>
-                    </UsageBudgetProvider>
-                  </LibraryProvider>
-                </SidebarProvider>
-              </UserProvider>
-            </AppUserProvider>
-          </PostHogProvider>
-          <Toaster />
-          {isCloudDeployment && <Analytics />}
-        </ThemeProvider>
+        <LanguageProvider initialLocale={locale}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <PostHogProvider userId={user?.id ?? null}>
+              <AppUserProvider user={user} capabilities={capabilities}>
+                <UserProvider hasUser={!!userId}>
+                  <SidebarProvider defaultOpen={false}>
+                    <LibraryProvider>
+                      <UsageBudgetProvider
+                        key={user?.id ?? 'guest'}
+                        initialUsage={initialUsage}
+                        enabled={usageBudgetEnabled}
+                      >
+                        {userId && <AppSidebar user={user} />}
+                        <KeyboardShortcutHandler />
+                        <div className="flex flex-col flex-1 min-w-0">
+                          <Header user={user} />
+                          <main className="flex flex-1 min-h-0 min-w-0 overflow-hidden">
+                            <ArtifactRoot>{children}</ArtifactRoot>
+                          </main>
+                        </div>
+                      </UsageBudgetProvider>
+                    </LibraryProvider>
+                  </SidebarProvider>
+                </UserProvider>
+              </AppUserProvider>
+            </PostHogProvider>
+            <Toaster />
+            {isCloudDeployment && <Analytics />}
+          </ThemeProvider>
+        </LanguageProvider>
       </body>
     </html>
   )

@@ -8,6 +8,7 @@ import { chatStore } from '@/lib/chat-store'
 import { AppUserProvider } from '@/lib/contexts/app-user-context'
 
 import { AccountSettingsDialog } from '@/components/account-settings-dialog'
+import { LanguageProvider } from '@/components/language-provider'
 
 vi.mock('@/lib/actions/account', () => ({
   deleteAccount: vi.fn()
@@ -23,6 +24,7 @@ vi.mock('sonner', () => ({
 
 const { mockPush, mockRefresh } = vi.hoisted(() => ({
   mockPush: vi.fn(),
+
   mockRefresh: vi.fn()
 }))
 
@@ -32,27 +34,36 @@ vi.mock('next/navigation', () => ({
 
 const user: AppUser = {
   id: 'user-1',
+
   email: 'person@example.com',
+
   name: 'Test Person'
 }
 
 const capabilities = {
   signUp: true,
+
   passwordReset: true,
+
   deleteUser: true,
+
   oauth: false,
+
   emailVerification: false,
+
   share: true
 }
 
 function renderDialog(override: Partial<typeof capabilities> = {}) {
   return render(
-    <AppUserProvider
-      user={user}
-      capabilities={{ ...capabilities, ...override }}
-    >
-      <AccountSettingsDialog open onOpenChange={vi.fn()} user={user} />
-    </AppUserProvider>
+    <LanguageProvider>
+      <AppUserProvider
+        user={user}
+        capabilities={{ ...capabilities, ...override }}
+      >
+        <AccountSettingsDialog open onOpenChange={vi.fn()} user={user} />
+      </AppUserProvider>
+    </LanguageProvider>
   )
 }
 
@@ -61,8 +72,33 @@ describe('AccountSettingsDialog', () => {
     vi.clearAllMocks()
   })
 
+  it('switches languages immediately and persists the choice', () => {
+    renderDialog()
+
+    fireEvent.change(screen.getByLabelText('Language'), {
+      target: { value: 'ru' }
+    })
+
+    expect(screen.getByRole('heading', { name: 'Аккаунт' })).toBeInTheDocument()
+
+    expect(screen.getByRole('button', { name: 'Тёмная' })).toBeInTheDocument()
+
+    expect(document.cookie).toContain('morphic-language=ru')
+
+    expect(document.documentElement.lang).toBe('ru')
+
+    fireEvent.change(screen.getByLabelText('Язык'), {
+      target: { value: 'en' }
+    })
+
+    expect(screen.getByRole('heading', { name: 'Account' })).toBeInTheDocument()
+
+    expect(document.cookie).toContain('morphic-language=en')
+  })
+
   it('shows the delete-account entry point when the provider supports it', () => {
     renderDialog()
+
     expect(
       screen.getByRole('button', { name: 'Delete account' })
     ).toBeInTheDocument()
@@ -70,6 +106,7 @@ describe('AccountSettingsDialog', () => {
 
   it('hides the delete-account entry point when the provider lacks the capability', () => {
     renderDialog({ deleteUser: false })
+
     expect(
       screen.queryByRole('button', { name: 'Delete account' })
     ).not.toBeInTheDocument()
@@ -77,21 +114,28 @@ describe('AccountSettingsDialog', () => {
 
   it('deletes the account and clears the session', async () => {
     vi.mocked(deleteAccount).mockResolvedValue({ success: true })
+
     vi.mocked(signOut).mockResolvedValue({ success: true })
+
     renderDialog()
 
     chatStore.getOrCreate('cached', { messages: [] })
 
     fireEvent.click(screen.getByRole('button', { name: 'Delete account' }))
+
     fireEvent.click(
       screen.getAllByRole('button', { name: 'Delete account' }).at(-1)!
     )
 
     await waitFor(() => {
       expect(deleteAccount).toHaveBeenCalledTimes(1)
+
       expect(signOut).toHaveBeenCalledTimes(1)
+
       expect(chatStore.get('cached')).toBeUndefined()
+
       expect(mockPush).toHaveBeenCalledWith('/')
+
       expect(mockRefresh).toHaveBeenCalled()
     })
   })
@@ -99,17 +143,21 @@ describe('AccountSettingsDialog', () => {
   it('surfaces deletion errors', async () => {
     vi.mocked(deleteAccount).mockResolvedValue({
       success: false,
+
       error: 'Account deletion is unavailable in anonymous mode.'
     })
+
     renderDialog()
 
     fireEvent.click(screen.getByRole('button', { name: 'Delete account' }))
+
     fireEvent.click(
       screen.getAllByRole('button', { name: 'Delete account' }).at(-1)!
     )
 
     await waitFor(() => {
       expect(deleteAccount).toHaveBeenCalledTimes(1)
+
       expect(signOut).not.toHaveBeenCalled()
     })
   })

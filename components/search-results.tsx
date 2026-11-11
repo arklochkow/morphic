@@ -11,6 +11,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
+import { T } from '@/components/language-provider'
+
 export interface SearchResultsProps {
   results: SearchResultItem[]
   displayMode?: 'grid' | 'list'
@@ -113,7 +115,8 @@ export function SearchResults({
               className="h-auto px-2 py-1 text-muted-foreground"
               onClick={handleViewMore}
             >
-              View {additionalResultsCount} more
+              <T text={'View'} /> {additionalResultsCount}{' '}
+              <T text={'more'} />{' '}
             </Button>
           </div>
           <div className="hidden md:block md:w-1/4 md:p-1">
@@ -124,7 +127,8 @@ export function SearchResults({
                   className="text-muted-foreground"
                   onClick={handleViewMore}
                 >
-                  View {additionalResultsCount} more
+                  <T text={'View'} /> {additionalResultsCount}{' '}
+                  <T text={'more'} />{' '}
                 </Button>
               </CardContent>
             </Card>

@@ -1,4 +1,5 @@
 'use client'
+
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -19,6 +20,8 @@ import { IconLogo } from '@/components/ui/icons'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { PasswordInput } from '@/components/ui/password-input'
+
+import { T } from '@/components/language-provider'
 
 export function SignUpForm({
   className,
@@ -83,17 +86,19 @@ export function SignUpForm({
         <CardHeader className="text-center">
           <CardTitle className="text-2xl flex flex-col items-center justify-center gap-4">
             <IconLogo className="size-12" />
-            Create an account
+            <T text={'Create an account'} />{' '}
           </CardTitle>
           <CardDescription>
-            Enter your details below to get started
+            <T text={'Enter your details below to get started'} />{' '}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignUp}>
             <div className="flex flex-col gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">
+                  <T text={'Email'} />
+                </Label>
                 <Input
                   id="email"
                   type="email"
@@ -104,13 +109,15 @@ export function SignUpForm({
                 />
                 {inviteEmail && (
                   <p className="text-xs text-muted-foreground">
-                    This invitation is bound to {inviteEmail}.
+                    <T text={'This invitation is bound to'} /> {inviteEmail}.
                   </p>
                 )}
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">
+                    <T text={'Password'} />
+                  </Label>
                 </div>
                 <PasswordInput
                   id="password"
@@ -123,7 +130,9 @@ export function SignUpForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="repeat-password">Repeat Password</Label>
+                  <Label htmlFor="repeat-password">
+                    <T text={'Repeat Password'} />
+                  </Label>
                 </div>
                 <PasswordInput
                   id="repeat-password"
@@ -141,9 +150,9 @@ export function SignUpForm({
               </Button>
             </div>
             <div className="mt-6 text-center text-sm">
-              Already have an account?{' '}
+              <T text={'Already have an account?'} />{' '}
               <Link href="/auth/login" className="underline underline-offset-4">
-                Sign In
+                <T text={'Sign In'} />{' '}
               </Link>
             </div>
           </form>
@@ -151,7 +160,7 @@ export function SignUpForm({
       </Card>
       <div className="text-center text-xs text-muted-foreground">
         <Link href="/" className="hover:underline">
-          &larr; Back to Home
+          <T text={'← Back to Home'} />{' '}
         </Link>
       </div>
     </div>

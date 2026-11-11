@@ -1,6 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 
+/* eslint-disable @next/next/no-img-element */
 import {
   type Dispatch,
   type SetStateAction,
@@ -33,6 +33,7 @@ import {
 } from '@/components/ui/dialog'
 
 import { ImageCreditOverlay } from '@/components/image-credit-overlay'
+import { T } from '@/components/language-provider'
 
 interface SearchResultsImageSectionProps {
   images: SearchResultImage[]
@@ -260,7 +261,11 @@ export const SearchResultsImageSection: React.FC<
   })
 
   if (status === 'empty') {
-    return <div className="text-muted-foreground">No images found</div>
+    return (
+      <div className="text-muted-foreground">
+        <T text={'No images found'} />
+      </div>
+    )
   }
 
   const handleSelect = (index: number) => {
@@ -319,7 +324,9 @@ export const SearchResultsImageSection: React.FC<
             </DialogTrigger>
             <DialogContent className="max-w-[90vw] sm:max-w-[90vw] max-h-[90vh] overflow-auto border border-white/10 bg-black/60 shadow-2xl backdrop-blur-md">
               <DialogHeader>
-                <DialogTitle className="sr-only">Images</DialogTitle>
+                <DialogTitle className="sr-only">
+                  <T text={'Images'} />
+                </DialogTitle>
                 <DialogDescription className="text-sm text-white/70">
                   {query}
                 </DialogDescription>
@@ -354,16 +361,20 @@ export const SearchResultsImageSection: React.FC<
                   {filteredCount > 1 && (
                     <div className="absolute inset-8 flex items-center justify-between p-4 pointer-events-none">
                       <CarouselPrevious className="size-10 rounded-full shadow-sm focus:outline-hidden pointer-events-auto">
-                        <span className="sr-only">Previous</span>
+                        <span className="sr-only">
+                          <T text={'Previous'} />
+                        </span>
                       </CarouselPrevious>
                       <CarouselNext className="size-10 rounded-full shadow-sm focus:outline-hidden pointer-events-auto">
-                        <span className="sr-only">Next</span>
+                        <span className="sr-only">
+                          <T text={'Next'} />
+                        </span>
                       </CarouselNext>
                     </div>
                   )}
                 </Carousel>
                 <div className="py-2 text-center text-sm text-white/70">
-                  {current} of {filteredCount}
+                  {current} <T text={'of'} /> {filteredCount}
                 </div>
               </div>
             </DialogContent>

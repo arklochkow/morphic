@@ -16,6 +16,8 @@ import {
   subscribeToCookieChange
 } from '@/lib/utils/cookies'
 
+import { T, useTranslation } from '@/components/language-provider'
+
 import { Button } from './ui/button'
 import {
   DropdownMenu,
@@ -41,6 +43,7 @@ export function SearchModeSelector({
   isAdaptiveAuthRequired = false,
   onAdaptiveAuthRequired
 }: SearchModeSelectorProps) {
+  const { t } = useTranslation()
   const value = useSyncExternalStore(
     subscribeToCookieChange,
     getSearchModeSnapshot,
@@ -115,7 +118,9 @@ export function SearchModeSelector({
                   )}
                 />
               )}
-              <span className="text-xs font-medium">{selectedMode?.label}</span>
+              <span className="text-xs font-medium">
+                <T text={selectedMode?.label ?? ''} />
+              </span>
               <ChevronDown
                 className={cn(
                   'ml-0.5 size-3 opacity-50 transition-transform duration-[160ms] ease-[var(--motion-ease-out)]',
@@ -141,11 +146,13 @@ export function SearchModeSelector({
                     <ModeIcon
                       className={cn('size-4 transition-colors', config.color)}
                     />
-                    <span className="text-sm font-medium">{config.label}</span>
+                    <span className="text-sm font-medium">
+                      <T text={config.label} />
+                    </span>
                   </div>
                   <div className="flex flex-col gap-0.5 ml-6">
                     <span className="text-xs text-muted-foreground">
-                      {config.description}
+                      <T text={config.description} />
                     </span>
                   </div>
                 </DropdownMenuItem>
@@ -195,7 +202,7 @@ export function SearchModeSelector({
                           ? 'text-foreground'
                           : 'text-muted-foreground hover:text-foreground/80'
                       )}
-                      aria-label={`${config.label} mode`}
+                      aria-label={`${t(config.label)} ${t('mode')}`}
                       aria-pressed={isSelected}
                     >
                       <Icon
@@ -216,11 +223,11 @@ export function SearchModeSelector({
                       <div className="flex items-center gap-2">
                         <Icon className={cn('size-5', config.color)} />
                         <h4 className="text-sm font-semibold">
-                          {config.label}
+                          <T text={config.label} />
                         </h4>
                       </div>
                       <p className="text-xs text-muted-foreground leading-tight">
-                        {config.description}
+                        <T text={config.description} />
                       </p>
                     </div>
                   </HoverCardContent>

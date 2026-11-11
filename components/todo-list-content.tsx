@@ -9,6 +9,8 @@ import { toPublicErrorPayload } from '@/lib/errors/public-error'
 import type { TodoItem } from '@/lib/types/ai'
 import { cn } from '@/lib/utils'
 
+import { T } from '@/components/language-provider'
+
 export type TodoListContentProps = {
   todos?: TodoItem[]
   message?: string
@@ -64,7 +66,9 @@ export function TodoListContent({
     return (
       <div className="flex items-center gap-2 p-4 text-red-600">
         <AlertCircle className="size-4" />
-        <span>Error: {publicError.error}</span>
+        <span>
+          <T text={'Error:'} /> {publicError.error}
+        </span>
       </div>
     )
   }
@@ -107,7 +111,7 @@ export function TodoListContent({
 
       {todos.length === 0 && (
         <div className="text-center py-8 text-muted-foreground">
-          No todos available
+          <T text={'No todos available'} />{' '}
         </div>
       )}
     </div>

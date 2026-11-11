@@ -6,6 +6,8 @@ import { DISCLAIMER_TEXT, getTips, shuffle } from '@/lib/footer-tips'
 
 import { useTypewriterCycle } from '@/hooks/use-typewriter-cycle'
 
+import { T } from '@/components/language-provider'
+
 function FooterContent() {
   const shuffledTips = useMemo(() => shuffle(getTips()), [])
 
@@ -29,7 +31,9 @@ function FooterContent() {
     <div className="flex items-center gap-2 select-none">
       {tip ? (
         <span className="flex items-center gap-1.5 font-mono text-xs text-muted-foreground/60">
-          <span>Tips:</span>
+          <span>
+            <T text={'Tips:'} />
+          </span>
           <span className="inline-flex items-center gap-0.5">
             {tip.keys.map((key, i) => (
               <kbd

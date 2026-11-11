@@ -8,6 +8,7 @@ import {
 
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
+import { T } from '@/components/language-provider'
 import { useTheme } from '@/components/theme-provider'
 
 export function ThemeMenuItems() {
@@ -17,15 +18,21 @@ export function ThemeMenuItems() {
     <>
       <DropdownMenuItem onClick={() => setTheme('light')}>
         <Sun className="size-4" />
-        <span>Light</span>
+        <span>
+          <T text={'Light'} />
+        </span>
       </DropdownMenuItem>
       <DropdownMenuItem onClick={() => setTheme('dark')}>
         <Moon className="size-4" />
-        <span>Dark</span>
+        <span>
+          <T text={'Dark'} />
+        </span>
       </DropdownMenuItem>
       <DropdownMenuItem onClick={() => setTheme('system')}>
         <Laptop className="size-4" />
-        <span>System</span>
+        <span>
+          <T text={'System'} />
+        </span>
       </DropdownMenuItem>
     </>
   )

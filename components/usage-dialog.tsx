@@ -8,6 +8,7 @@ import {
   DialogTitle
 } from '@/components/ui/dialog'
 
+import { T } from '@/components/language-provider'
 import type { UsageBudget } from '@/components/usage-budget-provider'
 
 interface UsageDialogProps {
@@ -38,16 +39,19 @@ export function UsageDialog({ open, onOpenChange, usage }: UsageDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Monthly usage</DialogTitle>
+          <DialogTitle>
+            <T text={'Monthly usage'} />
+          </DialogTitle>
           <DialogDescription className="sr-only">
-            Your remaining monthly usage and renewal date.
+            <T text={'Your remaining monthly usage and renewal date.'} />{' '}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-5">
           <div className="space-y-2">
             <p className="text-2xl font-semibold tracking-tight tabular-nums">
-              {usage.remaining} of {usage.limit} remaining
+              {usage.remaining} <T text={'of'} /> {usage.limit}{' '}
+              <T text={'remaining'} />{' '}
             </p>
             <div
               className="h-2 overflow-hidden rounded-full bg-muted"
@@ -69,21 +73,29 @@ export function UsageDialog({ open, onOpenChange, usage }: UsageDialogProps) {
               {formatUsageRenewal(usage.resetAt)}
             </p>
             <p className="text-sm text-muted-foreground">
-              Usage renews monthly based on when your account was created.
+              <T
+                text={
+                  'Usage renews monthly based on when your account was created.'
+                }
+              />{' '}
             </p>
           </div>
 
           <div className="rounded-lg bg-muted/60 px-4 py-3 text-sm">
             <div className="flex items-center justify-between gap-4 py-1">
-              <span>Quick</span>
+              <span>
+                <T text={'Quick'} />
+              </span>
               <span className="text-muted-foreground tabular-nums">
-                {usage.costs?.quick ?? 1} per message
+                {usage.costs?.quick ?? 1} <T text={'per message'} />{' '}
               </span>
             </div>
             <div className="flex items-center justify-between gap-4 py-1">
-              <span>Adaptive</span>
+              <span>
+                <T text={'Adaptive'} />
+              </span>
               <span className="text-muted-foreground tabular-nums">
-                {usage.costs?.adaptive ?? 2} per message
+                {usage.costs?.adaptive ?? 2} <T text={'per message'} />{' '}
               </span>
             </div>
           </div>

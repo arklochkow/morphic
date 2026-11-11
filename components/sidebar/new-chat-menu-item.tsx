@@ -4,6 +4,8 @@ import { IconPlus as Plus } from '@tabler/icons-react'
 
 import { SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
 
+import { T } from '@/components/language-provider'
+
 import { HomeLink } from './home-link'
 
 export function NewChatMenuItem() {
@@ -12,7 +14,9 @@ export function NewChatMenuItem() {
       <SidebarMenuButton asChild>
         <HomeLink className="flex items-center gap-2">
           <Plus className="size-4" />
-          <span>New</span>
+          <span>
+            <T text={'New'} />
+          </span>
         </HomeLink>
       </SidebarMenuButton>
     </SidebarMenuItem>

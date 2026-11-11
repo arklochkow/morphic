@@ -13,6 +13,8 @@ import { SearchResults as SearchResultsType } from '@/lib/types'
 import type { ToolPart, UIDataTypes, UIMessage, UITools } from '@/lib/types/ai'
 import { cn } from '@/lib/utils'
 
+import { T } from '@/components/language-provider'
+
 import ProcessHeader from './process-header'
 
 interface FetchSectionProps {
@@ -118,7 +120,9 @@ export function FetchSection({
             <span>{error}</span>
           </>
         ) : isToolLoading ? (
-          <span className="animate-pulse">Retrieving...</span>
+          <span className="animate-pulse">
+            <T text={'Retrieving...'} />
+          </span>
         ) : undefined
       }
       className={cn(

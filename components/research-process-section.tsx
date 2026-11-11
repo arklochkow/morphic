@@ -13,6 +13,8 @@ import type { ToolPart, UIDataTypes, UIMessage, UITools } from '@/lib/types/ai'
 import type { DynamicToolPart } from '@/lib/types/dynamic-tools'
 import { cn } from '@/lib/utils'
 
+import { T } from '@/components/language-provider'
+
 import {
   Collapsible,
   CollapsibleContent,
@@ -384,7 +386,8 @@ export function ResearchProcessSection({
                 >
                   <Waypoints className="size-4 text-muted-foreground group-hover:text-muted-foreground/70" />
                   <span className="font-medium text-muted-foreground group-hover:text-muted-foreground/70">
-                    Research Process ({totalParts} steps)
+                    <T text={'Research Process ('} />
+                    {totalParts} <T text={'steps)'} />{' '}
                   </span>
                   <ChevronDown
                     className={cn(

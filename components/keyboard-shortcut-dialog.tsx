@@ -9,6 +9,8 @@ import {
   SHORTCUTS
 } from '@/lib/keyboard-shortcuts'
 
+import { T } from '@/components/language-provider'
+
 import {
   Dialog,
   DialogContent,
@@ -43,9 +45,11 @@ export function KeyboardShortcutDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle>Keyboard Shortcuts</DialogTitle>
+          <DialogTitle>
+            <T text={'Keyboard Shortcuts'} />
+          </DialogTitle>
           <DialogDescription className="sr-only">
-            List of available keyboard shortcuts
+            <T text={'List of available keyboard shortcuts'} />{' '}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-1">

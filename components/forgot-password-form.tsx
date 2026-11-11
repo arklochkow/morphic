@@ -17,6 +17,8 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
+import { T } from '@/components/language-provider'
+
 export function ForgotPasswordForm({
   className,
   ...props
@@ -47,30 +49,44 @@ export function ForgotPasswordForm({
       {success ? (
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl">Check Your Email</CardTitle>
-            <CardDescription>Password reset instructions sent</CardDescription>
+            <CardTitle className="text-2xl">
+              <T text={'Check Your Email'} />
+            </CardTitle>
+            <CardDescription>
+              <T text={'Password reset instructions sent'} />
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              If you registered using your email and password, you will receive
-              a password reset email.
+              <T
+                text={
+                  'If you registered using your email and password, you will receive a password reset email.'
+                }
+              />{' '}
             </p>
           </CardContent>
         </Card>
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl">Reset Your Password</CardTitle>
+            <CardTitle className="text-2xl">
+              <T text={'Reset Your Password'} />
+            </CardTitle>
             <CardDescription>
-              Type in your email and we&apos;ll send you a link to reset your
-              password
+              <T
+                text={
+                  "Type in your email and we'll send you a link to reset your password"
+                }
+              />{' '}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleForgotPassword}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">
+                    <T text={'Email'} />
+                  </Label>
                   <Input
                     id="email"
                     type="email"
@@ -86,12 +102,12 @@ export function ForgotPasswordForm({
                 </Button>
               </div>
               <div className="mt-4 text-center text-sm">
-                Already have an account?{' '}
+                <T text={'Already have an account?'} />{' '}
                 <Link
                   href="/auth/login"
                   className="underline underline-offset-4"
                 >
-                  Login
+                  <T text={'Login'} />{' '}
                 </Link>
               </div>
             </form>

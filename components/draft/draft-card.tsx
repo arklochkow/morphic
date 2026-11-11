@@ -10,6 +10,8 @@ import {
 import { draftDisplayTitle, parseDraftFenceBody } from '@/lib/draft/draft'
 import type { ToolPart } from '@/lib/types/ai'
 
+import { T } from '@/components/language-provider'
+
 import { useArtifact } from '../artifact/artifact-context'
 
 import { useLiveDraftBlock } from './draft-store'
@@ -48,7 +50,7 @@ function CardShell({
         <span className="text-xs text-muted-foreground">{detail}</span>
       </span>
       <span className="ml-auto shrink-0 text-xs text-muted-foreground">
-        Open
+        <T text={'Open'} />{' '}
       </span>
     </button>
   )

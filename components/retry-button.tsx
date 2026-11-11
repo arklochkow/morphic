@@ -2,6 +2,8 @@
 
 import { IconRefresh as RotateCcw } from '@tabler/icons-react'
 
+import { T } from '@/components/language-provider'
+
 import { Button } from './ui/button'
 
 interface RetryButtonProps {
@@ -23,7 +25,9 @@ export const RetryButton: React.FC<RetryButtonProps> = ({
       aria-label={`Retry from message ${messageId}`}
     >
       <RotateCcw className="size-4" />
-      <span className="sr-only">Retry</span>
+      <span className="sr-only">
+        <T text={'Retry'} />
+      </span>
     </Button>
   )
 }

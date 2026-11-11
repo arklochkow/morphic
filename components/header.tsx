@@ -9,6 +9,8 @@ import { cn } from '@/lib/utils'
 
 import { useSidebar } from '@/components/ui/sidebar'
 
+import { T } from '@/components/language-provider'
+
 import { Button } from './ui/button'
 import { FeedbackModal } from './feedback-modal'
 // import { Button } from './ui/button' // No longer needed directly here for Sign In button
@@ -44,7 +46,7 @@ export const Header: React.FC<HeaderProps> = ({ user }) => {
               size="sm"
               onClick={() => setFeedbackOpen(true)}
             >
-              Feedback
+              <T text={'Feedback'} />{' '}
             </Button>
           )}
           {user ? <UserMenu user={user} /> : <GuestMenu />}

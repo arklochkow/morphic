@@ -11,6 +11,7 @@ import {
   useState
 } from 'react'
 
+import { T } from '@/components/language-provider'
 import { UsageLimitDialog } from '@/components/usage-limit-dialog'
 
 export interface UsageBudget {
@@ -247,9 +248,9 @@ export function UsageBudgetWarning() {
       role="status"
       aria-live="polite"
     >
-      You&apos;re running low on monthly usage.{' '}
+      <T text={"You're running low on monthly usage."} />{' '}
       <span className="tabular-nums">{Math.max(0, usage.remaining)}</span>{' '}
-      remaining.
+      <T text={'remaining.'} />{' '}
     </p>
   )
 }

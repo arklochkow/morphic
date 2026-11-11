@@ -1,3 +1,5 @@
+vi.mock('@/components/language-menu', () => ({ LanguageMenu: () => null }))
+
 import React from 'react'
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'

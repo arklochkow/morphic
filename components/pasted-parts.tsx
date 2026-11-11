@@ -10,6 +10,8 @@ import {
 
 import { faviconUrl } from '@/lib/utils/favicon'
 
+import { T } from '@/components/language-provider'
+
 // Collapsed card for a pasted text blob (a `data-pastedContent` part, or a
 // legacy `<user-content>` block in old messages).
 export function PastedContentCard({
@@ -28,7 +30,7 @@ export function PastedContentCard({
         onClick={() => setOpen(o => !o)}
       >
         <FileText className="size-3.5 shrink-0" />
-        {label} · {text.length.toLocaleString()} chars
+        {label} · {text.length.toLocaleString()} <T text={'chars'} />{' '}
         {open ? (
           <ChevronUp className="size-3.5 shrink-0" />
         ) : (

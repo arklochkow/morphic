@@ -2,6 +2,8 @@
 
 import { SerperSearchResultItem, SerperSearchResults } from '@/lib/types'
 
+import { T } from '@/components/language-provider'
+
 import { VideoResultGrid } from './video-result-grid'
 
 export interface VideoSearchResultsProps {
@@ -41,7 +43,11 @@ export function VideoSearchResults({
   const query = results.searchParameters?.q || ''
 
   if (!videos || videos.length === 0) {
-    return <div className="text-muted-foreground">No videos found</div>
+    return (
+      <div className="text-muted-foreground">
+        <T text={'No videos found'} />
+      </div>
+    )
   }
 
   return (

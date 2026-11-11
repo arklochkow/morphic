@@ -23,6 +23,8 @@ import type {
   UITools
 } from '@/lib/types/ai'
 
+import { T, useTranslation } from '@/components/language-provider'
+
 import { useLibrary } from './library/library-context'
 import { Button } from './ui/button'
 import {
@@ -73,6 +75,8 @@ export function AnswerSection({
   libraryAvailable = true,
   onQuoteContext
 }: AnswerSectionProps) {
+  const { t } = useTranslation()
+
   const displayContent = stripSourceContextBlocks(content)
   const contentRef = useRef<HTMLDivElement>(null)
   const [selection, setSelection] = useState<{
@@ -229,7 +233,7 @@ export function AnswerSection({
         chatId,
         chars: selection.text.length
       })
-      toast.success('Saved to library', {
+      toast.success(t('Saved to library'), {
         action: {
           label: 'Open',
           onClick: () => {
@@ -247,7 +251,7 @@ export function AnswerSection({
         chatId,
         reason: 'exception'
       })
-      toast.error('Failed to save note')
+      toast.error(t('Failed to save note'))
     } finally {
       setIsSavingSelection(false)
     }
@@ -304,7 +308,7 @@ export function AnswerSection({
                     onClick={handleSaveSelection}
                   >
                     <Bookmark className="size-3.5" />
-                    Save
+                    <T text={'Save'} />{' '}
                   </Button>
                 )}
                 {showSelectionDeepDiveButton && (
@@ -316,7 +320,7 @@ export function AnswerSection({
                     onClick={handleQuoteSelection}
                   >
                     <MessageCirclePlus className="size-3.5" />
-                    Deep dive
+                    <T text={'Deep dive'} />{' '}
                   </Button>
                 )}
               </div>
@@ -345,11 +349,14 @@ export function AnswerSection({
               <Bookmark className="size-6 text-muted-foreground" />
             </div>
             <DialogTitle className="text-center text-xl font-semibold">
-              Save notes to your library
+              <T text={'Save notes to your library'} />{' '}
             </DialogTitle>
             <DialogDescription className="text-center text-muted-foreground">
-              Sign in or create an account to save selected text to your
-              Library.
+              <T
+                text={
+                  'Sign in or create an account to save selected text to your Library.'
+                }
+              />{' '}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-col gap-2">
@@ -364,7 +371,7 @@ export function AnswerSection({
                   })
                 }
               >
-                Sign Up
+                <T text={'Sign Up'} />{' '}
               </Link>
             </Button>
             <Button asChild variant="outline" className="w-full">
@@ -378,7 +385,7 @@ export function AnswerSection({
                   })
                 }
               >
-                Sign In
+                <T text={'Sign In'} />{' '}
               </Link>
             </Button>
           </DialogFooter>

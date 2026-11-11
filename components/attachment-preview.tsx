@@ -2,6 +2,8 @@
 
 import React from 'react'
 
+import { T } from '@/components/language-provider'
+
 interface Attachment {
   name: string | undefined
   url?: string
@@ -28,7 +30,7 @@ export const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({
           <div key={index} className="max-w-xs break-words">
             {!url ? (
               <div className="rounded-md border px-3 py-2 text-xs text-muted-foreground">
-                {att.name ?? 'File'} unavailable
+                {att.name ?? 'File'} <T text={'unavailable'} />{' '}
               </div>
             ) : isImage ? (
               <div className="flex size-16 items-center justify-center overflow-hidden rounded-md border bg-muted/20">

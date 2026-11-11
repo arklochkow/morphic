@@ -20,6 +20,8 @@ import type { UIDataTypes, UIMessage, UITools } from '@/lib/types/ai'
 import { cn } from '@/lib/utils'
 import { processCitations } from '@/lib/utils/citation'
 
+import { T, useTranslation } from '@/components/language-provider'
+
 import { useLibrary } from './library/library-context'
 import { SaveNoteAuthDialog } from './library/save-note-auth-dialog'
 import { Button } from './ui/button'
@@ -65,6 +67,8 @@ export function MessageActions({
   visible = true,
   citationMaps
 }: MessageActionsProps) {
+  const { t } = useTranslation()
+
   const [feedbackScore, setFeedbackScore] = useState<number | null>(
     initialFeedbackScore ?? null
   )
@@ -89,7 +93,7 @@ export function MessageActions({
     await navigator.clipboard.writeText(
       stripSpecBlocks(stripSourceContextBlocks(mappedMessage))
     )
-    toast.success('Message copied to clipboard')
+    toast.success(t('Message copied to clipboard'))
   }
 
   async function handleSaveNote() {
@@ -139,7 +143,7 @@ export function MessageActions({
         chatId,
         chars: content.length
       })
-      toast.success('Saved to library', {
+      toast.success(t('Saved to library'), {
         action: {
           label: 'Open',
           onClick: () => {
@@ -155,7 +159,7 @@ export function MessageActions({
         chatId,
         reason: 'exception'
       })
-      toast.error('Failed to save note')
+      toast.error(t('Failed to save note'))
     } finally {
       setIsSavingNote(false)
     }
@@ -196,7 +200,7 @@ export function MessageActions({
           reason: 'response'
         })
         console.error('Failed to submit feedback')
-        toast.error('Failed to submit feedback')
+        toast.error(t('Failed to submit feedback'))
       }
     } catch (error) {
       captureClient('feedback_failed', {
@@ -206,7 +210,7 @@ export function MessageActions({
         reason: 'exception'
       })
       console.error('Error submitting feedback:', error)
-      toast.error('Failed to submit feedback')
+      toast.error(t('Failed to submit feedback'))
     } finally {
       setIsSubmittingFeedback(false)
     }
@@ -277,13 +281,13 @@ export function MessageActions({
                     onClick={handleSaveNote}
                     disabled={isSavingNote}
                     className="rounded-full"
-                    aria-label="Save to library"
+                    aria-label={t('Save to library')}
                   >
                     <Bookmark size={14} />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent className="text-xs">
-                  Save to library
+                  <T text={'Save to library'} />{' '}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>

@@ -6,6 +6,8 @@ import { IconBookmark as Bookmark } from '@tabler/icons-react'
 
 import { captureClient } from '@/lib/analytics/posthog-client'
 
+import { T } from '@/components/language-provider'
+
 import { Button } from '../ui/button'
 import {
   Dialog,
@@ -35,11 +37,14 @@ export function SaveNoteAuthDialog({
             <Bookmark className="size-6 text-muted-foreground" />
           </div>
           <DialogTitle className="text-center text-xl font-semibold">
-            Save notes to your library
+            <T text={'Save notes to your library'} />{' '}
           </DialogTitle>
           <DialogDescription className="text-center text-muted-foreground">
-            Sign in or create an account to save answers and selected text to
-            your Library.
+            <T
+              text={
+                'Sign in or create an account to save answers and selected text to your Library.'
+              }
+            />{' '}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex-col gap-2">
@@ -54,7 +59,7 @@ export function SaveNoteAuthDialog({
                 })
               }
             >
-              Sign Up
+              <T text={'Sign Up'} />{' '}
             </Link>
           </Button>
           <Button asChild variant="outline" className="w-full">
@@ -68,7 +73,7 @@ export function SaveNoteAuthDialog({
                 })
               }
             >
-              Sign In
+              <T text={'Sign In'} />{' '}
             </Link>
           </Button>
         </DialogFooter>

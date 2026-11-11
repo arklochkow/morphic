@@ -36,23 +36,29 @@ import {
   SidebarMenuItem
 } from '@/components/ui/sidebar'
 
+import { T, useTranslation } from '@/components/language-provider'
+
 import { Spinner } from '../ui/spinner'
 
 interface ChatMenuItemProps {
   chat: DBChat
 }
 
-const formatDateWithTime = (date: Date | string) => {
+const formatDateWithTime = (
+  date: Date | string,
+  locale: 'en' | 'ru',
+  t: (text: string) => string
+) => {
   const parsedDate = new Date(date)
   const now = new Date()
   const yesterday = new Date()
   yesterday.setDate(yesterday.getDate() - 1)
 
   const formatTime = (date: Date) => {
-    return date.toLocaleString('en-US', {
+    return date.toLocaleString(locale === 'ru' ? 'ru-RU' : 'en-US', {
       hour: '2-digit',
       minute: '2-digit',
-      hour12: true
+      hour12: locale !== 'ru'
     })
   }
 
@@ -61,26 +67,27 @@ const formatDateWithTime = (date: Date | string) => {
     parsedDate.getMonth() === now.getMonth() &&
     parsedDate.getFullYear() === now.getFullYear()
   ) {
-    return `Today, ${formatTime(parsedDate)}`
+    return `${t('Today')}, ${formatTime(parsedDate)}`
   } else if (
     parsedDate.getDate() === yesterday.getDate() &&
     parsedDate.getMonth() === yesterday.getMonth() &&
     parsedDate.getFullYear() === yesterday.getFullYear()
   ) {
-    return `Yesterday, ${formatTime(parsedDate)}`
+    return `${t('Yesterday')}, ${formatTime(parsedDate)}`
   } else {
-    return parsedDate.toLocaleString('en-US', {
+    return parsedDate.toLocaleString(locale === 'ru' ? 'ru-RU' : 'en-US', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit',
-      hour12: true
+      hour12: locale !== 'ru'
     })
   }
 }
 
 export function ChatMenuItem({ chat }: ChatMenuItemProps) {
+  const { locale, t } = useTranslation()
   const pathname = usePathname()
   const path = `/search/${chat.id}`
   const isActive = pathname === path
@@ -128,7 +135,7 @@ export function ChatMenuItem({ chat }: ChatMenuItemProps) {
             {chat.title}
           </div>
           <div className="text-xs text-muted-foreground w-full">
-            {formatDateWithTime(chat.createdAt)}
+            {formatDateWithTime(chat.createdAt, locale, t)}
           </div>
         </Link>
       </SidebarMenuButton>
@@ -137,7 +144,9 @@ export function ChatMenuItem({ chat }: ChatMenuItemProps) {
         <DropdownMenuTrigger asChild>
           <SidebarMenuAction className="size-7 p-1 mr-1">
             <MoreHorizontal size={16} />
-            <span className="sr-only">Chat Actions</span>
+            <span className="sr-only">
+              <T text={'Chat Actions'} />
+            </span>
           </SidebarMenuAction>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" align="start">
@@ -150,7 +159,7 @@ export function ChatMenuItem({ chat }: ChatMenuItemProps) {
             }}
           >
             <Trash2 size={14} />
-            Delete Chat
+            <T text={'Delete Chat'} />{' '}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -158,14 +167,21 @@ export function ChatMenuItem({ chat }: ChatMenuItemProps) {
       <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>
+              <T text={'Are you absolutely sure?'} />
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this
-              chat history.
+              <T
+                text={
+                  'This action cannot be undone. This will permanently delete this chat history.'
+                }
+              />{' '}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPending}>
+              <T text={'Cancel'} />
+            </AlertDialogCancel>
             <AlertDialogAction
               disabled={isPending}
               onClick={event => {

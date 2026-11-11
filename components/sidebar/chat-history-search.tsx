@@ -24,6 +24,8 @@ import {
   CommandList
 } from '@/components/ui/command'
 
+import { T } from '@/components/language-provider'
+
 import { ChatHistorySkeleton } from './chat-history-skeleton'
 
 const DEBOUNCE_MS = 250
@@ -282,7 +284,11 @@ export function ChatHistorySearch({
             <ChatHistorySkeleton />
           </div>
         )}
-        {showEmpty && <CommandEmpty>No matches</CommandEmpty>}
+        {showEmpty && (
+          <CommandEmpty>
+            <T text={'No matches'} />
+          </CommandEmpty>
+        )}
         {results && results.title.length > 0 && (
           <CommandGroup heading="By title">
             {results.title.map(item => (
@@ -319,7 +325,7 @@ export function ChatHistorySearch({
           <CommandGroup heading="In thinking">
             {results!.thinking!.length === 0 ? (
               <div className="text-muted-foreground px-2 py-1.5 text-xs">
-                No thinking matches
+                <T text={'No thinking matches'} />{' '}
               </div>
             ) : (
               results!.thinking!.map(item => (
@@ -359,7 +365,7 @@ export function ChatHistorySearch({
           ) : (
             <Sparkles size={14} />
           )}
-          Search thinking
+          <T text={'Search thinking'} />{' '}
         </button>
       )}
     </Command>

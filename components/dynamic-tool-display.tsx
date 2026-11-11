@@ -4,6 +4,8 @@ import React from 'react'
 
 import { toPublicErrorPayload } from '@/lib/errors/public-error'
 
+import { T } from '@/components/language-provider'
+
 // This matches the structure from AI SDK v5
 type DynamicToolPart =
   | {
@@ -86,7 +88,9 @@ export function DynamicToolDisplay({ part }: DynamicToolDisplayProps) {
         part.state === 'output-available' ||
         part.state === 'output-error') && (
         <div className="mb-2">
-          <div className="text-xs text-muted-foreground mb-1">Input:</div>
+          <div className="text-xs text-muted-foreground mb-1">
+            <T text={'Input:'} />
+          </div>
           <pre className="text-xs bg-muted p-2 rounded overflow-auto max-h-40">
             <code>{JSON.stringify(part.input, null, 2)}</code>
           </pre>
@@ -96,7 +100,9 @@ export function DynamicToolDisplay({ part }: DynamicToolDisplayProps) {
       {/* Output display */}
       {part.state === 'output-available' && (
         <div className="mb-2">
-          <div className="text-xs text-muted-foreground mb-1">Output:</div>
+          <div className="text-xs text-muted-foreground mb-1">
+            <T text={'Output:'} />
+          </div>
           <pre className="text-xs bg-muted p-2 rounded overflow-auto max-h-40">
             <code>{JSON.stringify(part.output, null, 2)}</code>
           </pre>
@@ -106,7 +112,9 @@ export function DynamicToolDisplay({ part }: DynamicToolDisplayProps) {
       {/* Error display */}
       {part.state === 'output-error' && (
         <div className="mb-2">
-          <div className="text-xs text-destructive mb-1">Error:</div>
+          <div className="text-xs text-destructive mb-1">
+            <T text={'Error:'} />
+          </div>
           <div className="text-xs bg-destructive/10 text-destructive p-2 rounded">
             {errorMessage}
           </div>

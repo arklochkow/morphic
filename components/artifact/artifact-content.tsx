@@ -2,6 +2,8 @@
 
 import { Part, ToolPart } from '@/lib/types/ai'
 
+import { T } from '@/components/language-provider'
+
 import { DraftPanel } from '../draft/draft-panel'
 
 import { ReasoningContent } from './reasoning-content'
@@ -32,7 +34,9 @@ export function ArtifactContent({ part }: { part: Part | null }) {
       return <DraftPanel />
     default:
       return (
-        <div className="p-4">Details for this part type are not available</div>
+        <div className="p-4">
+          <T text={'Details for this part type are not available'} />
+        </div>
       )
   }
 }

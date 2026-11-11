@@ -6,6 +6,7 @@ import { captureClient } from '@/lib/analytics/posthog-client'
 
 import { SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
 
+import { T } from '@/components/language-provider'
 import { useLibrary } from '@/components/library/library-context'
 
 export function LibraryMenuItem() {
@@ -22,7 +23,9 @@ export function LibraryMenuItem() {
         }}
       >
         <IconLibrary className="size-4" />
-        <span>Library</span>
+        <span>
+          <T text={'Library'} />
+        </span>
       </SidebarMenuButton>
     </SidebarMenuItem>
   )

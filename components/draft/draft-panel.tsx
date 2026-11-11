@@ -22,6 +22,8 @@ import { Separator } from '@/components/ui/separator'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { TooltipButton } from '@/components/ui/tooltip-button'
 
+import { T, useTranslation } from '@/components/language-provider'
+
 import { useArtifact } from '../artifact/artifact-context'
 import { useLibrary } from '../library/library-context'
 import { SaveNoteAuthDialog } from '../library/save-note-auth-dialog'
@@ -32,6 +34,8 @@ import { useDraftStore, useLiveDraftBlock } from './draft-store'
 type SelectionAnchor = { text: string; top: number; left: number }
 
 export function DraftPanel() {
+  const { t } = useTranslation()
+
   const {
     messages,
     quote,
@@ -108,9 +112,9 @@ export function DraftPanel() {
   if (!live && !shown) {
     return (
       <>
-        <DraftHeader title="Draft" onClose={close} />
+        <DraftHeader title={t('Draft')} onClose={close} />
         <p className="p-4 text-sm text-muted-foreground">
-          No draft in this chat yet.
+          <T text={'No draft in this chat yet.'} />{' '}
         </p>
       </>
     )
@@ -122,9 +126,9 @@ export function DraftPanel() {
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(content)
-      toast.success('Draft copied')
+      toast.success(t('Draft copied'))
     } catch {
-      toast.error('Could not copy the draft')
+      toast.error(t('Could not copy the draft'))
     }
   }
 
@@ -179,7 +183,7 @@ export function DraftPanel() {
         chatId,
         chars: content.length
       })
-      toast.success('Saved to library', {
+      toast.success(t('Saved to library'), {
         action: {
           label: 'Open',
           onClick: () => {
@@ -195,7 +199,7 @@ export function DraftPanel() {
         chatId,
         reason: 'exception'
       })
-      toast.error('Failed to save note')
+      toast.error(t('Failed to save note'))
     } finally {
       setIsSaving(false)
     }
@@ -247,7 +251,7 @@ export function DraftPanel() {
         {!live && (
           <span className="flex items-center gap-1">
             <Pencil className="size-3" />
-            Select text to edit it
+            <T text={'Select text to edit it'} />{' '}
           </span>
         )}
       </DraftHeader>
@@ -270,7 +274,7 @@ export function DraftPanel() {
               }}
             >
               <Pencil className="size-3.5" />
-              Edit this
+              <T text={'Edit this'} />{' '}
             </Button>
           )}
           <MarkdownMessage message={content} drafts={false} />
@@ -303,6 +307,8 @@ function DraftHeader({
   onClose: () => void
   children?: React.ReactNode
 }) {
+  const { t } = useTranslation()
+
   return (
     <TooltipProvider>
       <div className="flex items-start gap-2 px-4 py-2">
@@ -321,7 +327,7 @@ function DraftHeader({
           variant="ghost"
           size="icon"
           onClick={onClose}
-          aria-label="Close panel"
+          aria-label={t('Close panel')}
           tooltipContent="Close"
         >
           <X className="size-4" />
@@ -343,6 +349,8 @@ function DraftFooter({
   copyDisabled: boolean
   saveDisabled: boolean
 }) {
+  const { t } = useTranslation()
+
   return (
     <div className="flex items-center justify-end gap-1 border-t px-4 py-2">
       <Button
@@ -358,7 +366,7 @@ function DraftFooter({
         <Button
           variant="ghost"
           size="icon"
-          aria-label="Save to library"
+          aria-label={t('Save to library')}
           disabled={saveDisabled}
           onClick={onSave}
         >
