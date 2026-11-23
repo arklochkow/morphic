@@ -25,6 +25,9 @@ describe('OpenAI compatible history', () => {
     vi.stubGlobal('fetch', fetchMock)
 
     const model = getModel('openai:custom-model')
+    if (typeof model === 'string') {
+      throw new Error('Expected an OpenAI model instance')
+    }
     await expect(
       model.doGenerate({
         prompt: [
