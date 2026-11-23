@@ -79,7 +79,9 @@ export function createResearcher({
   chatId,
   searchMode = 'adaptive',
   citationLabelSeed,
-  currentDraft = null
+  currentDraft = null,
+  alternativesOnly = false,
+  spaceInstructions = ''
 }: {
   model: string
   modelConfig?: Model
@@ -87,6 +89,8 @@ export function createResearcher({
   searchMode?: SearchMode
   citationLabelSeed?: number
   currentDraft?: DraftVersion | null
+  alternativesOnly?: boolean
+  spaceInstructions?: string
 }) {
   try {
     // Date only: a second-precision timestamp sits at the head of the prompt
@@ -101,7 +105,7 @@ export function createResearcher({
     const fetchTool = createFetchTool({ labelAllocator })
     const askQuestionTool = createQuestionTool(model)
     const todoTools = createTodoTools()
-    const draftTools = createDraftTools(currentDraft)
+    const draftTools = createDraftTools(currentDraft, alternativesOnly)
 
     let systemPrompt: string
     let activeToolsList: (keyof ResearcherTools)[] = []
@@ -155,7 +159,7 @@ export function createResearcher({
     // Create ToolLoopAgent with all configuration
     const agent = new ToolLoopAgent({
       model: getModel(model),
-      instructions: `${systemPrompt}\nCurrent date: ${currentDate}`,
+      instructions: `${systemPrompt}${spaceInstructions ? `\n\n${spaceInstructions}` : ''}\nCurrent date: ${currentDate}`,
       tools,
       activeTools: activeToolsList,
       stopWhen: isStepCount(maxSteps),

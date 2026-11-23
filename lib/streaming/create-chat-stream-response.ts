@@ -3,8 +3,13 @@ import { propagateAttributes, startActiveObservation } from '@langfuse/tracing'
 import type { StreamTextOnErrorCallback } from 'ai'
 import { consumeStream, convertToModelMessages, smoothStream } from 'ai'
 
+import {
+  attachSpaceNote,
+  buildSpaceInstructions
+} from '@/lib/agents/prompts/space-instructions'
 import { researcher } from '@/lib/agents/researcher'
 import { buildDraftVersions, currentDraftVersion } from '@/lib/draft/draft'
+import { isReviseAlternativesTurn } from '@/lib/draft/revise'
 import {
   createPublicErrorResponse,
   serializePublicError
@@ -50,6 +55,10 @@ import { logAPICallErrorDiagnostics } from './helpers/log-api-call-error'
 import { persistStreamResults } from './helpers/persist-stream-results'
 import { prepareMessages } from './helpers/prepare-messages'
 import {
+  resolveChatSpace,
+  type ResolvedChatSpace
+} from './helpers/resolve-chat-space'
+import {
   buildStreamErrorSpanUpdate,
   type StreamErrorPhase,
   type StreamErrorStage
@@ -81,6 +90,7 @@ export async function createChatStreamResponse(
     abortSignal,
     isNewChat,
     searchMode,
+    spaceColor,
     onZeroPartError
   } = config
 
@@ -117,6 +127,18 @@ export async function createChatStreamResponse(
     }
   } else {
     perfLog('loadChat skipped for new chat')
+  }
+
+  let chatSpace: ResolvedChatSpace = { spaceId: null, space: null }
+  try {
+    chatSpace = await resolveChatSpace({
+      userId,
+      isNewChat: !!isNewChat,
+      requestedColor: spaceColor,
+      chatSpaceId: initialChat?.spaceId
+    })
+  } catch (error) {
+    console.error('Space lookup failed, continuing without one:', error)
   }
 
   const executeStream = async (rootSpan?: LangfuseSpan): Promise<Response> => {
@@ -198,7 +220,8 @@ export async function createChatStreamResponse(
       initialChat,
       abortSignal,
       parentTraceId,
-      isNewChat
+      isNewChat,
+      spaceId: isNewChat ? chatSpace.spaceId : undefined
     }
 
     // Declare titlePromise in outer scope for onFinish access
@@ -224,6 +247,8 @@ export async function createChatStreamResponse(
         buildDraftVersions(messagesToModel)
       )
 
+      const spaceInstructions = buildSpaceInstructions(chatSpace.space)
+
       // Get the researcher agent with search mode
       streamErrorStage = 'build-agent'
       const researchAgent = researcher({
@@ -232,7 +257,11 @@ export async function createChatStreamResponse(
         chatId,
         searchMode,
         citationLabelSeed: nextCitationLabelNumber(messagesToModel),
-        currentDraft
+        currentDraft,
+        spaceInstructions,
+        alternativesOnly: isReviseAlternativesTurn(
+          messagesToModel.findLast(m => m.role === 'user') ?? { role: '' }
+        )
       })
 
       streamErrorStage = 'transform-messages'
@@ -328,7 +357,7 @@ export async function createChatStreamResponse(
       // failure is classified here too rather than assumed away: the same error
       // is recoverable whichever handler it arrives at.
       const result = await researchAgent.stream({
-        messages: modelMessages,
+        messages: attachSpaceNote(modelMessages, spaceInstructions),
         abortSignal,
         onError: ({ error }) => {
           if (isToolFailureError(error)) {
@@ -396,16 +425,16 @@ export async function createChatStreamResponse(
             if (hasToolFailure && !hasAnswerAfterToolFailure(responseMessage)) {
               hasStreamError = true
             }
-            if (
-              hasEmptyResponse ||
-              (hasStreamError && !hasResponseContentPart(responseMessage))
-            ) {
+            const failedWithoutContent =
+              hasStreamError && !hasResponseContentPart(responseMessage)
+            if (hasEmptyResponse || failedWithoutContent) {
               await onZeroPartError?.()
             }
 
-            // Persist stream results to database
+            // A failed turn with nothing streamed is not an answer, so it is
+            // not saved as one and the chat ends on the user's message.
             await persistStreamResults(
-              responseMessage,
+              failedWithoutContent ? null : responseMessage,
               chatId,
               userId,
               titlePromise,
@@ -413,7 +442,8 @@ export async function createChatStreamResponse(
               searchMode,
               context.modelId,
               context.pendingInitialSave,
-              context.pendingInitialUserMessage
+              context.pendingInitialUserMessage,
+              context.spaceId ?? null
             )
           } finally {
             await endTracing()
